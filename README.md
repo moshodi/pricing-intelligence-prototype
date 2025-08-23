@@ -7,6 +7,11 @@ Build a working prototype that allows a Backhouse supply-side partner
 equipment or supplies) across major distributor marketplaces such as
 Webstaurant, KaTom, and Restaurant Warehouse.
 
+## Requirements
+* Track current prices for the selected SKUs across multiple distributorsites.
+* Refresh automatically on a set schedule (e.g., daily) so supply-side users see up-to-date pricing.
+* Store and display basic price history so users can view trends over time.
+
 ### Approach
 Before developing solutions, I like to ask myself questions about potential challenges and constraints to gain a deeper understanding of the problem. This deeper understanding of the problem allows me to design a proof of concept of how a solution will work. These were the following questions I had:
 *  "How can we reference the same product variant across multiple distributor marketplaces if the naming and SKUs across these marketplace sites is most likely different?"
