@@ -14,4 +14,4 @@ Before developing solutions, I like to ask myself questions about potential chal
 *  "What if a user enters a non-specific input for a product? (e.g. Keurig Coffee Maker rather than "Keurig K-Mini Plus — Black")
 *  "What is the workflow of a user's input to price tracking?"
 *  "What data visualization should be displayed on the front-end to showcase the pricing history for each SKU?"
-
+*  "Are there any third party api services that can be used for a more robust and programmatic approach than scraping?"
