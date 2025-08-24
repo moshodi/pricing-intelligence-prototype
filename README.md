@@ -45,7 +45,7 @@ Based on my findings, my original hypothesis for creating a canonical product in
 #### How I Built Off of My Failed Hypothesis
 I realized the only consistent data point across all sites was the **Manufacturer Part Number (MPN)**. Because MPNs are assigned by the manufacturer, they’re outside the seller’s control and can serve as a unique identifier for the same SKU across all three distributor sites. This led me to conclude that searching for a SKU across multiple distributors must be precise, since most other data points can be misaligned because they’re seller-scoped.
 
-### Design Questions
+### Technical Design Questions
 Now that I how I can cross reference SKUs on multiple distributor sites, I started asking myself the following questions to come up with a Proof of Concept.
 
 **Q:** "What data visualization should be displayed on the front-end to showcase the pricing history for each SKU?"
