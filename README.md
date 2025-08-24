@@ -61,35 +61,37 @@ Now that I how I can cross reference SKUs on multiple distributor sites, I start
 **Q:** What data entities am I storing?
 * **A:**
 	* ```
-   		-- products: id + unique mpn
+		PRAGMA foreign_keys = ON;
+		
+		-- products: id (UUID stored as TEXT) + unique mpn
 		CREATE TABLE products (
-		  id   UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+		  id   TEXT PRIMARY KEY,
 		  mpn  TEXT NOT NULL UNIQUE
 		);
 		
 		-- listings: per-site mapping to a product
 		CREATE TABLE listings (
-		  id          BIGSERIAL PRIMARY KEY,
-		  product_id  UUID NOT NULL REFERENCES products(id) ON DELETE CASCADE,
+		  id          INTEGER PRIMARY KEY AUTOINCREMENT,
+		  product_id  TEXT NOT NULL REFERENCES products(id) ON DELETE CASCADE,
 		  site        TEXT NOT NULL CHECK (site IN ('webstaurant','katom','restaurant_warehouse')),
 		  url         TEXT NOT NULL,
-		  sku         TEXT,  -- seller-scoped identifier
-		
+		  sku         TEXT,
 		  UNIQUE (site, url),
-		  UNIQUE (site, sku)   -- allows multiple NULLs; enforces per-site SKU uniqueness when present
+		  UNIQUE (site, sku)
 		);
 		
 		-- prices: snapshot time series
 		CREATE TABLE prices (
-		  id           BIGSERIAL PRIMARY KEY,
-		  listing_id   BIGINT NOT NULL REFERENCES listings(id) ON DELETE CASCADE,
-		  collected_at TIMESTAMPTZ NOT NULL DEFAULT now(),
-		  price        NUMERIC(12,2) NOT NULL
+		  id           INTEGER PRIMARY KEY AUTOINCREMENT,
+		  listing_id   INTEGER NOT NULL REFERENCES listings(id) ON DELETE CASCADE,
+		  collected_at TEXT NOT NULL DEFAULT (datetime('now')),
+		  price        NUMERIC NOT NULL
 		);
 		
 		-- helpful indexes
-		CREATE INDEX idx_listings_product ON listings(product_id); --- fast “find all listings for a product.
-		CREATE INDEX idx_prices_listing_time ON prices(listing_id, collected_at DESC); --- fast “latest price for a listing” and time-range queries.
+		CREATE INDEX idx_listings_product ON listings(product_id);
+		CREATE INDEX idx_prices_listing_time ON prices(listing_id, collected_at DESC);
+
 	  ```
   	* **MPN** lives on `product`. Each snapshot (price) links to a `listing` which links to a SKU (`product`) (and thus to the MPN).
 
