@@ -63,14 +63,14 @@ Now that I how I can cross reference SKUs on multiple distributor sites, I start
 	* ```
 		PRAGMA foreign_keys = ON;
 		
-		-- products: id (UUID stored as TEXT) + unique mpn
-		CREATE TABLE products (
+		-- product: id (UUID stored as TEXT) + unique mpn
+		CREATE TABLE product (
 		  id   TEXT PRIMARY KEY,
 		  mpn  TEXT NOT NULL UNIQUE
 		);
 		
-		-- listings: per-site mapping to a product
-		CREATE TABLE listings (
+		-- listing: per-site mapping to a product
+		CREATE TABLE listing (
 		  id          INTEGER PRIMARY KEY AUTOINCREMENT,
 		  product_id  TEXT NOT NULL REFERENCES products(id) ON DELETE CASCADE,
 		  site        TEXT NOT NULL CHECK (site IN ('webstaurant','katom','restaurant_warehouse')),
@@ -80,8 +80,8 @@ Now that I how I can cross reference SKUs on multiple distributor sites, I start
 		  UNIQUE (site, sku)
 		);
 		
-		-- prices: snapshot time series
-		CREATE TABLE prices (
+		-- price: snapshot time series
+		CREATE TABLE price (
 		  id           INTEGER PRIMARY KEY AUTOINCREMENT,
 		  listing_id   INTEGER NOT NULL REFERENCES listings(id) ON DELETE CASCADE,
 		  collected_at TEXT NOT NULL DEFAULT (datetime('now')),
@@ -89,8 +89,8 @@ Now that I how I can cross reference SKUs on multiple distributor sites, I start
 		);
 		
 		-- helpful indexes
-		CREATE INDEX idx_listings_product ON listings(product_id);
-		CREATE INDEX idx_prices_listing_time ON prices(listing_id, collected_at DESC);
+		CREATE INDEX idx_listing_product ON listing(product_id);
+		CREATE INDEX idx_price_listing_time ON price(listing_id, collected_at DESC);
 
 	  ```
   	* **MPN** lives on `product`. Each snapshot (price) links to a `listing` which links to a SKU (`product`) (and thus to the MPN).
