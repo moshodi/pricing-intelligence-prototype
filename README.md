@@ -46,15 +46,7 @@ Based on my findings, my original hypothesis for creating a canonical product in
 I realized the only consistent data point across all sites was the **Manufacturer Part Number (MPN)**. Because MPNs are assigned by the manufacturer, they’re outside the seller’s control and can serve as a unique identifier for the same SKU across all three distributor sites. This led me to conclude that searching for a SKU across multiple distributors must be precise, since most other data points can be misaligned because they’re seller-scoped.
 
 ### Design Questions
-**Q:** "What is the design workflow of a user's input to price tracking?"
-* **A:**
-	* User picks 3 products (by MPN): 036019-ABAB, MBF8004GR, BL-CN-1000.
-	* Frontend → “Add by MPN”: user enters each MPN; app finds the exact PDP on Webstaurant, KaTom, and Restaurant Warehouse; user confirms.
-	* Backend maps identity: creates one canonical product per MPN and saves each site’s listing (URL + local SKU/itemId).
-	* Initial scrape: per listing, extract current price (+ stock) and store a snapshot.
-	* Dashboard: shows 3 products, each with a cross-site price row and a tiny sparkline (last 30 days).
-	* Auto-refresh (daily): scheduler re-scrapes all listings; new points append to price history.
-	* On-demand: user clicks “Refresh now” for a product; backend re-scrapes just those listings and updates the chart/table immediately.
+Now that I how I can cross reference SKUs on multiple distributor sites, I started asking myself the following questions to come up with a Proof of Concept.
 
 **Q:** "What data visualization should be displayed on the front-end to showcase the pricing history for each SKU?"
 * **A:**
@@ -64,4 +56,19 @@ I realized the only consistent data point across all sites was the **Manufacture
   	*  Meta: “Last updated” timestamp below the chart.
 
 **Q:** "Are there any third party api services that can be used for a more robust and programmatic approach than scraping?"
-* **A:** None: In order to extract the data we must implement web scraping logic across the three distributor sites.
+* **A:** There are none available. In order to extract the data we must implement web scraping logic across the three distributor sites.
+
+**Q:** What data entities am I storing?
+* **A:**
+	* `products(id, mpn, …)`
+ 	* `listings(id, product_id FK → products.id, site, url, marketplace_sku, …) `
+  	* `prices(id, listing_id FK → listings.id, collected_at, price, …)` <- price snapshots
+  	* **MPN** lives on products. Each snapshot (prices) links → listings → products (and thus to the MPN).
+
+**Q:** "What is the design workflow of a user's input to price tracking?"
+* **A:**
+	* Simple example (end-to-end)
+		* User picks 3 products (by name or MPN).
+		* System finds each product’s page on Webstaurant, KaTom, and Restaurant Warehouse, confirms the variant, grabs the current price (+ local SKU/URL), and stores a snapshot-timestamped row per market place listing saved in the DB. 
+		* Dashboard shows a row per product with each site’s price + “last updated,” and a tiny price-history sparkline. 
+		* A daily scheduler re-scrapes and appends new points so users always see up-to-date prices and trends—even if nobody opens the app.
