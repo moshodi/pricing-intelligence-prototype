@@ -110,7 +110,7 @@ Now that I how I can cross reference SKUs on multiple distributor sites, I start
 
 **Q:** What is the most direct approach for scraping SKU price data on **Restaurant Warehouse**
 * **A:**
-	* GET `https://therestaurantwarehouse.com/search?type=product&q=<MPN>`
+	* GET `https://therestaurantwarehouse.com/search?type=product&q=<MPN>` (ensure MPN uppercasing)
  	* Parse result cards; choose the one whose title contains the MPN
   	* Request the product link
   	* Extract the price (SKU is not publically available on the Restaurant Warehouse site. SKU is NULL)
