@@ -50,4 +50,5 @@ Before developing solutions, I like to ask myself questions about potential chal
   	*  Window toggle: 7/30/90-day; show current price and Δ (abs/%).
   	*  Meta: “Last updated” timestamp below the chart.
 
-
+**Q:** "Are there any third party api services that can be used for a more robust and programmatic approach than scraping?"
+* **A:** None: In order to extract the data we must implement web scraping logic across the three distributor sites.
