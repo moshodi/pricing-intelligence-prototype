@@ -21,7 +21,7 @@ Before developing solutions, I like to ask myself questions about potential chal
 *  "What data visualization should be displayed on the front-end to showcase the pricing history for each SKU?"
 *  "Are there any third party api services that can be used for a more robust and programmatic approach than scraping?"
 
-#### Answers to These Questions
+#### Original Answers to These Questions
 **Q:** "How can we reference the same product variant across multiple distributor marketplaces if the naming and SKUs across these marketplace sites is most likely different?"
 * **A:** Create a canonical product in your system and map each marketplace’s local listing (with that site’s SKU/ID) to it. Then you track prices per listing and roll them up to the canonical product.
 
