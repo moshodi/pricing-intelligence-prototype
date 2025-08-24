@@ -68,7 +68,7 @@ Now that I how I can cross reference SKUs on multiple distributor sites, I start
 **Q:** "What is the design workflow of a user's input to price tracking?"
 * **A:**
 	* Simple example (end-to-end)
-		* User picks 3 products (by name or MPN).
+		* User picks 3 products (by MPN).
 		* System finds each product’s page on Webstaurant, KaTom, and Restaurant Warehouse, confirms the variant, grabs the current price (+ local SKU/URL), and stores a snapshot-timestamped row per market place listing saved in the DB. 
 		* Dashboard shows a row per product with each site’s price + “last updated,” and a tiny price-history sparkline. 
 		* A daily scheduler re-scrapes and appends new points so users always see up-to-date prices and trends—even if nobody opens the app.
