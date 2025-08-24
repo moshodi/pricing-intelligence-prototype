@@ -46,23 +46,15 @@ Based on my findings, my original hypothesis for creating a canonical product in
 I realized the only consistent data point across all sites was the **Manufacturer Part Number (MPN)**. Because MPNs are assigned by the manufacturer, they’re outside the seller’s control and can serve as a unique identifier for the same SKU across all three distributor sites. This led me to conclude that searching for a SKU across multiple distributors must be precise, since most other data points can be misaligned because they’re seller-scoped.
 
 ### Design Questions
-**Q:** "What if a user enters a non-specific input for a product? (e.g. Keurig Coffee Maker rather than "Keurig K-Mini Plus — Black")
-* **A:** If a user types a non-specific input that backend will do a fuzzy search on the 'products' table. The UI will then show a short list of exact variants. A user must pick an exact one.
-
-**Q:** "What is the workflow of a user's input to price tracking?"
-* **A:** User searches by name; app shows variants -> user picks exact variant
-	* Frontend:
- 		* User searches by name; app shows variants -> user picks exact variant
- 		* Three chosen products show a cross-site price table (Webstaurant, KaTom, Restaurant Warehouse), “last updated,” and a small price-history sparkline. (Meets “track across sites,” “auto-refresh,” “display history.”)
-   	* Backend:
-   		* Data model: products (canonical variant), listings (per-site: URL, local SKU/ID), prices (time-series).
-   	 	* Identity resolution: when a variant is selected, link each marketplace listing to that product
-   	  	* Collectors: per-listing fetch/parsers pull current price & stock and write a snapshot to prices
-   	  	* Scheduler: daily job triggers collectors (and on-demand refresh) so data stays current.
-   	  	* API: endpoints to read current prices, history, and manage products/listings.
-
-**Q:** "What are the common attributes (or data points) for a product variant that are shared across distributor sites?"
-* **A:** Across Webstaurant, KaTom, and Restaurant Warehouse a Manufacturer Part Number (MPN) can be used as a strong indicator of the same product variant. On a Webstaurant product variant page, the MPN is shown as `MFR: <MPN>`. On a KaTom product variant page, the MPN is shown as `MPN: <MPN>`. On the Restaurant Warehouse product variant page, the MPN declared in the actual name of each product variant.
+**Q:** "What is the design workflow of a user's input to price tracking?"
+* **A:**
+	* User picks 3 products (by MPN): 036019-ABAB, MBF8004GR, BL-CN-1000.
+	* Frontend → “Add by MPN”: user enters each MPN; app finds the exact PDP on Webstaurant, KaTom, and Restaurant Warehouse; user confirms.
+	* Backend maps identity: creates one canonical product per MPN and saves each site’s listing (URL + local SKU/itemId).
+	* Initial scrape: per listing, extract current price (+ stock) and store a snapshot.
+	* Dashboard: shows 3 products, each with a cross-site price row and a tiny sparkline (last 30 days).
+	* Auto-refresh (daily): scheduler re-scrapes all listings; new points append to price history.
+	* On-demand: user clicks “Refresh now” for a product; backend re-scrapes just those listings and updates the chart/table immediately.
 
 **Q:** "What data visualization should be displayed on the front-end to showcase the pricing history for each SKU?"
 * **A:**
