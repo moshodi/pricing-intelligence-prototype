@@ -60,10 +60,38 @@ Now that I how I can cross reference SKUs on multiple distributor sites, I start
 
 **Q:** What data entities am I storing?
 * **A:**
-	* `products(id, mpn, …)`
- 	* `listings(id, product_id FK → products.id, site, url, marketplace_sku, …) `
-  	* `prices(id, listing_id FK → listings.id, collected_at, price, …)` <- price snapshots
-  	* **MPN** lives on products. Each snapshot (prices) links → listings → products (and thus to the MPN).
+	* ```
+   		-- products: id + unique mpn
+		CREATE TABLE products (
+		  id   UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+		  mpn  TEXT NOT NULL UNIQUE
+		);
+		
+		-- listings: per-site mapping to a product
+		CREATE TABLE listings (
+		  id          BIGSERIAL PRIMARY KEY,
+		  product_id  UUID NOT NULL REFERENCES products(id) ON DELETE CASCADE,
+		  site        TEXT NOT NULL CHECK (site IN ('webstaurant','katom','restaurant_warehouse')),
+		  url         TEXT NOT NULL,
+		  sku         TEXT,  -- seller-scoped identifier
+		
+		  UNIQUE (site, url),
+		  UNIQUE (site, sku)   -- allows multiple NULLs; enforces per-site SKU uniqueness when present
+		);
+		
+		-- prices: snapshot time series
+		CREATE TABLE prices (
+		  id           BIGSERIAL PRIMARY KEY,
+		  listing_id   BIGINT NOT NULL REFERENCES listings(id) ON DELETE CASCADE,
+		  collected_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+		  price        NUMERIC(12,2) NOT NULL
+		);
+		
+		-- helpful indexes
+		CREATE INDEX idx_listings_product ON listings(product_id);
+		CREATE INDEX idx_prices_listing_time ON prices(listing_id, collected_at DESC);
+	  ```
+  	* **MPN** lives on `product`. Each snapshot (price) links to a `listing` which links to a SKU (`product`) (and thus to the MPN).
 
 **Q:** "What is the design workflow of a user's input to price tracking?"
 * **A:**
