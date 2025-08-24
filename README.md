@@ -72,3 +72,8 @@ Now that I how I can cross reference SKUs on multiple distributor sites, I start
 		* System finds each product’s page on Webstaurant, KaTom, and Restaurant Warehouse, confirms the variant, grabs the current price (+ local SKU/URL), and stores a snapshot-timestamped row per market place listing saved in the DB. 
 		* Dashboard shows a row per product with each site’s price + “last updated,” and a tiny price-history sparkline. 
 		* A daily scheduler re-scrapes and appends new points so users always see up-to-date prices and trends—even if nobody opens the app.
+  			* Scheduler queries the DB for tracked products and their mapped listings (site + URL + local SKU).
+     		* It scrapes by listing URL
+       			* only uses the MPN for product detail page rediscovery if the request to the listing is not a status code of 200)
+          		* Handle 404s/redirects with a re-resolve-by-MPN fallback and retry/backoff.
+       		* Verifies MPN on page, extract price/stock, and append a snapshot to the history table.
