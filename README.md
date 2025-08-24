@@ -1,4 +1,4 @@
-# Pricing-intelligence-prototype
+# Pricing Intelligence Prototype
 Backhouse Founding Engineer Case Study
 
 ## Objective
