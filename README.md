@@ -14,11 +14,11 @@ Webstaurant, KaTom, and Restaurant Warehouse.
 
 ### Approach
 Before developing solutions, I like to ask myself questions about potential challenges and constraints to gain a deeper understanding of the problem by conducting hypotheses. This deeper understanding of the problem allows me to design a proof of concept of how a solution will work. This was the main question for the hypothesis I wanted to conduct:
-*  "How can we reference the same product variant across multiple distributor marketplaces if the naming and SKUs across these marketplace sites is most likely different?"
+*  "How can we reference the same SKU across multiple distributor marketplaces if the naming of the product variant and SKUs across these marketplace sites is most likely different?"
 
 
 #### Original Hypotheses
-**Q:** "How can we reference the same product variant across multiple distributor marketplaces if the naming and SKUs across these marketplace sites is most likely different?"
+**Q:** "How can we reference the same SKUs across multiple distributor marketplaces if the naming of the product variant and SKUs across these marketplace sites is most likely different?"
 * **A:** Create a canonical product in your system and map each marketplace’s local listing (with that site’s SKU/ID) to it. Then you track prices per listing and roll them up to the canonical product.
 
 ### Action Steps:
@@ -26,7 +26,7 @@ Based off the original questions that I asked myself and answered, I started tak
 
 **Action Step for the Canonical Product Hypythesis**
 ```
-**Q:** "How can we reference the same product variant across multiple distributor marketplaces if the naming and SKUs across these marketplace sites is most likely different?"
+**Q:** "How can we reference the same product variant across multiple distributor marketplaces if the naming of the product variant and SKUs across these marketplace sites is most likely different?"
 * **A:** Create a canonical product in your system and map each marketplace’s local listing (with that site’s SKU/ID) to it. Then you track prices per listing and roll them up to the canonical product.
 ```
 
@@ -43,7 +43,7 @@ My first step was figuring out how I can implement an efficient method of search
 Based on my findings, my original hypothesis for creating a canonical product in my system proved to be **INCORRECT** as I could not build a robust canonical method for searching SKUs across multiple sites. If I were to go ahead and attempt to create a canonical method, it would involve a solution that contains a lot of **spaghetti code**-code that involes a lot of hard-coding and special casing for each site's quirks. 
 
 #### How I Built Off of My Failed Hypothesis
-I realized the only consistent data point across all sites was the Manufacturer Part Number (MPN). Because MPNs are assigned by the manufacturer, they’re outside the seller’s control and can serve as a unique identifier for the same SKU across all three distributor sites. This led me to conclude that searching for a SKU across multiple distributors must be precise, since most other data points can be misaligned because they’re seller-scoped.
+I realized the only consistent data point across all sites was the **Manufacturer Part Number (MPN)**. Because MPNs are assigned by the manufacturer, they’re outside the seller’s control and can serve as a unique identifier for the same SKU across all three distributor sites. This led me to conclude that searching for a SKU across multiple distributors must be precise, since most other data points can be misaligned because they’re seller-scoped.
 
 ### Design Questions
 **Q:** "What if a user enters a non-specific input for a product? (e.g. Keurig Coffee Maker rather than "Keurig K-Mini Plus — Black")
