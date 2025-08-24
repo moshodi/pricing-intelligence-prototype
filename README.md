@@ -95,14 +95,25 @@ Now that I how I can cross reference SKUs on multiple distributor sites, I start
 	  ```
   	* **MPN** lives on `product`. Each snapshot (price) links to a `listing` which links to a SKU (`product`) (and thus to the MPN).
 
-**Q:** What is the most direct approach for scraping SKU price data on KaTom
+**Q:** What is the most direct approach for scraping SKU price data on **KaTom**
 * **A:**
-	*  GET https://www.katom.com/search?w=<MPN> (ensure uppercasing)
+	*  GET `https://www.katom.com/search?w=<MPN>` (ensure MPN uppercasing)
  	*  On the results page, pick the product card whose MPN field exactly equals your normalized MPN.
-  	*  Scrape the sku and price  
-  	*  More direct approach than Google site:katom.com "<MPN>" because we are using KaTom's live catalog and not querying web-wide results.
+  	*  Scrape the sku (KaTom #) and price  
+  	*  **NOTE:** More direct approach than Google site:katom.com "<MPN>" because we are using KaTom's live catalog and not querying web-wide results.
  
+**Q:** What is the most direct approach for scraping SKU price data on **Webstaurant**
+* **A:**
+	*  GET `[https://www.katom.com/search?w=<MPN>](https://www.webstaurantstore.com/search/%3CMPN%3E.html)` (ensure MPN uppercasing)
+ 	*  On the results page, pick the product card whose MFR field exactly equals your normalized MPN.
+  *  Scrape the sku (Item #) and price
 
+**Q:** What is the most direct approach for scraping SKU price data on **Restaurant Warehouse**
+* **A:**
+	* GET `https://therestaurantwarehouse.com/search?type=product&q=<MPN>`
+ 	* Parse result cards; choose the one whose title contains the MPN
+  	* Request the product link
+  	* Extract the price (SKU is not publically available on the Restaurant Warehouse site. SKU is NULL)
 
 **Q:** "What is the design workflow of a user's input to price tracking?"
 * **A:**
