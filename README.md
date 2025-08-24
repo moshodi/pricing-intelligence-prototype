@@ -88,8 +88,8 @@ Now that I how I can cross reference SKUs on multiple distributor sites, I start
 		);
 		
 		-- helpful indexes
-		CREATE INDEX idx_listings_product ON listings(product_id);
-		CREATE INDEX idx_prices_listing_time ON prices(listing_id, collected_at DESC);
+		CREATE INDEX idx_listings_product ON listings(product_id); --- fast “find all listings for a product.
+		CREATE INDEX idx_prices_listing_time ON prices(listing_id, collected_at DESC); --- fast “latest price for a listing” and time-range queries.
 	  ```
   	* **MPN** lives on `product`. Each snapshot (price) links to a `listing` which links to a SKU (`product`) (and thus to the MPN).
 
