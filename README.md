@@ -104,7 +104,7 @@ Now that I how I can cross reference SKUs on multiple distributor sites, I start
  
 **Q:** What is the most direct approach for scraping SKU price data on **Webstaurant**
 * **A:**
-	*  GET `https://www.katom.com/search?w=<MPN>` (ensure MPN uppercasing)
+	*  GET `https://www.webstaurantstore.com/search/<MPN>.html` (ensure MPN uppercasing)
  	*  On the results page, pick the product card whose MFR field exactly equals your normalized MPN.
   *  Scrape the sku (Item #) and price
 
